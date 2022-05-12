@@ -9,6 +9,7 @@ module com.example.libraryapp {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires java.sql;
 
     opens com.example.libraryapp to javafx.fxml;
     exports com.example.libraryapp;
