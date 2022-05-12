@@ -4,7 +4,7 @@ public interface ILibraryStore {
 
     Book[] getBookWithTitle(String title);
     /*
-    Används för att hämta en specifik bok, som är tillgänglig med hjälp av bokens title
+    Används för att hämta en specifik bok, som är tillgänglig, med hjälp av bokens title
     Den hämtar en array då det kan finnas flera böcker av samma sort som är tillgängliga
     Den kommer användas i huvudsak av användaren
      */
@@ -60,7 +60,7 @@ public interface ILibraryStore {
     samt att ändra "availability" attributet till true.
      */
 
-    void lendBook(int bookID);
+    void storeLendBook(int bookID);
     /*
     Används när en bok ska lånas, genom dess ID
     fungerar på motsatt sätt till returnBook, alltså;
@@ -71,26 +71,28 @@ public interface ILibraryStore {
     void createUser(int userID, String firstName, String lastName, String personalNumber, int level);
    /*
    Används för att skapa en ny användare
-   eftersom användare inte får ha samma personnummer,
-   så används funktionen getUserPersonalNumber här
-   Den arrayen som den hämtar kollas sedan igenom och jämförs med det inmatade i denna funktion
-   Även kommer den liknande funktionen med bannade användare användas här
-   Kommer även använda funktionen getAllUserID för att kolla att det idet man vill använda
-   sig av är tillägnligt
     */
 
-    void deleteUser(int userID);
+    void storeDeleteUser(int userID);
     /*
     Används för att ta bort en användare
     bör fungera på så sätt att den ta bort den användare som har matchande ID som inputen
      */
 
-    void suspendUser(int userID);
+    void storeSuspendUser(int userID);
     /*
     Används för att suspenda en användare
     bör sätta deras "suspended" attribut till true
     även öka deras "suscounter" +1
     suspension funktionerna kommer vi nog ta som det sista
+    lämna tillbaka alla böcker som användaren har lånat (med returnbooks)
+    lägg till user i suspended-tabellen
+     */
+
+    void unsuspendUser(int userID);
+    /*
+    används när användare ska sluta vara suspended, gör motsatsen till ovanstående metod
+    skillnaden är att suscounter inte minskar
      */
 
 

@@ -47,7 +47,7 @@ public class LibraryStore implements ILibraryStore{
     }
 
     @Override
-    public void lendBook(int bookID) {
+    public void storeLendBook(int bookID) {
 
     }
 
@@ -57,12 +57,17 @@ public class LibraryStore implements ILibraryStore{
     }
 
     @Override
-    public void deleteUser(int userID) {
+    public void storeDeleteUser(int userID) {
 
     }
 
     @Override
-    public void suspendUser(int userID) {
+    public void storeSuspendUser(int userID) {
+
+    }
+
+    @Override
+    public void unsuspendUser(int userID) {
 
     }
 }
