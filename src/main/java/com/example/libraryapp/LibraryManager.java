@@ -22,7 +22,7 @@ public class LibraryManager implements ILibraryManager{
     }
 
     @Override
-    public void createUser(int userID, String firstName, String lastName, String personalNumber, int level) {
+    public void registerUser(int userID, String firstName, String lastName, String personalNumber, int level) {
 
     }
 

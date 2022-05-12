@@ -57,12 +57,12 @@ public class LibraryStore implements ILibraryStore{
     }
 
     @Override
-    public void storeDeleteUser(int userID) {
+    public void deleteUser(int userID) {
 
     }
 
     @Override
-    public void storeSuspendUser(int userID) {
+    public void suspendUser(int userID) {
 
     }
 

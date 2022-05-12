@@ -27,7 +27,7 @@ public interface ILibraryManager {
      */
 
 
-    void createUser(int userID, String firstName, String lastName, String personalNumber, int level);
+    void registerUser(int userID, String firstName, String lastName, String personalNumber, int level);
     /*
     Denna metod anvädns när en user ska skapas
     Denna metoden kommer även kolla och checka så att anvädaren får skapas

@@ -73,13 +73,13 @@ public interface ILibraryStore {
    Används för att skapa en ny användare
     */
 
-    void storeDeleteUser(int userID);
+    void deleteUser(int userID);
     /*
     Används för att ta bort en användare
     bör fungera på så sätt att den ta bort den användare som har matchande ID som inputen
      */
 
-    void storeSuspendUser(int userID);
+    void suspendUser(int userID);
     /*
     Används för att suspenda en användare
     bör sätta deras "suspended" attribut till true
