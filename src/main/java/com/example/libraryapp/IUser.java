@@ -1,5 +1,4 @@
 package com.example.libraryapp;
 
-public class DatabaseStore {
-
+public interface IUser {
 }
