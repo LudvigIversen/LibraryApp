@@ -3,13 +3,13 @@ package com.example.libraryapp;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class System extends Application {
+public class MainApp extends Application {
 
     public static void main(String[] args) {
         launch(args);
     }
 
-/*
+    /*
 här kommer behöva finnas någon metod för att logga in antingen som librarian eller user
 beroende på vad man lägger in kommer mer eller mindre två olika program startas
 detta kommer göra så att vissa funktioner är låsta bakom vissa "program"
