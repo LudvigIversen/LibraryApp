@@ -1,22 +1,25 @@
 package com.example.libraryapp;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 public interface ILibraryStore {
 
-    Book[] getBookWithTitle(String title);
+    ArrayList<Book> getBookWithTitle(String title) throws SQLException;
     /*
     Används för att hämta en specifik bok, som är tillgänglig, med hjälp av bokens title
     Den hämtar en array då det kan finnas flera böcker av samma sort som är tillgängliga
     Den kommer användas i huvudsak av användaren
      */
 
-    Book[] getBookWithISBN(int ISBN);
+    ArrayList<Book> getBookWithISBN(int ISBN) throws SQLException;
     /*
     Används för att hämta en specifik bok, som är tillgänglig med hjälp av bokens ISBN
     Den hämtar en array då det kan finnas flera böcker av samma sort som är tillgängliga
     Denna kommer användas i huvudsak av bibliotekarien
      */
 
-    String[][] getBooksAndAvailability();
+    ArrayList<String> getBooksAndAvailability();
     /*
     Används för att hämta alla böcker och hur många exemplar som finns tillgängliga
     kommer använda något liknande denna query;
@@ -32,23 +35,23 @@ public interface ILibraryStore {
     Denna metod används för att hämta en användare med hjälp av användar-ID
      */
 
-    int[] getAllUserID();
+    ArrayList<Integer> getAllUserID();
     /*
     hämtar alla nuvarande existerande användarID, har med createUser funktionen att göra
      */
 
-    Book[] getUserBooks(int userID);
+    ArrayList<Book> getUserBooks(int userID);
     /*
     Hämtar från kopplingstabellen de böcker, samt antalet (går att se genom längden på arrayen),
     som användaren har utlånade
      */
 
-    String[] getUserPersonalNumbers();
+    ArrayList<String> getUserPersonalNumbers();
     /*
     Hämtar alla personnummer som finns i databasen, används för funktionen createUser
      */
 
-    String[] getBannedUsersPersonalNumber();
+    ArrayList<String> getBannedUsersPersonalNumber();
     /*
     Hämtar de personnummer på före detta användare som numera är bannade och inte får registrera sig igen
      */

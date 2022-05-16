@@ -1,10 +1,14 @@
 package com.example.libraryapp;
 
 public class Book {
-    private int bookID;
-    private int ISBN;
-    private String title;
-    private String author;
+    public int bookID;
+    public int ISBN;
+    public String title;
+    public String author;
+
+    public Book() {
+
+    }
 
     public Book(int bookID, int ISBN, String title, String author){
         this.bookID = bookID;
@@ -13,8 +17,18 @@ public class Book {
         this.author = author;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookID=" + bookID +
+                ", ISBN=" + ISBN +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                '}';
+    }
+
     public int getID() {
-        return bookID;
+        return this.bookID;
     }
 
     public void setID(int ID) {
@@ -22,7 +36,7 @@ public class Book {
     }
 
     public int getISBN() {
-        return ISBN;
+        return this.ISBN;
     }
 
     public void setISBN(int ISBN) {
@@ -30,7 +44,7 @@ public class Book {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title) {
