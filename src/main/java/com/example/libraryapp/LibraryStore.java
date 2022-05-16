@@ -62,6 +62,11 @@ public class LibraryStore implements ILibraryStore{
     }
 
     @Override
+    public void banUser(int userID) {
+
+    }
+
+    @Override
     public void suspendUser(int userID) {
 
     }

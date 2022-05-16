@@ -14,7 +14,7 @@ här kommer behöva finnas någon metod för att logga in antingen som librarian
 beroende på vad man lägger in kommer mer eller mindre två olika program startas
 detta kommer göra så att vissa funktioner är låsta bakom vissa "program"
 denna log-in funktion kommer också vara grunden till hur vi suspendar användare då vi kollar
-deras lånade böcker och när de senast var lånade
+deras lånade böcker och när de senast var
  */
 
     @Override

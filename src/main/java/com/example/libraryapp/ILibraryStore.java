@@ -66,6 +66,7 @@ public interface ILibraryStore {
     fungerar på motsatt sätt till returnBook, alltså;
     lägg till i kopplingstabellen
     ändra bokens "availability" till false
+    lägg även till tiden av lånat med CurrentTime
      */
 
     void createUser(int userID, String firstName, String lastName, String personalNumber, int level);
@@ -77,6 +78,13 @@ public interface ILibraryStore {
     /*
     Används för att ta bort en användare
     bör fungera på så sätt att den ta bort den användare som har matchande ID som inputen
+     */
+
+    void banUser(int userID);
+    /*
+    Används för att banna en användare
+    fungerar genom att ta bort användaren i user-tabellen,
+    och lägga till dem i banned_users tabellen
      */
 
     void suspendUser(int userID);
