@@ -23,12 +23,31 @@ public class TestFörDatabasConnection {
             System.out.println(" ");
         }
         LibraryStore store = new LibraryStore();
-
+/*
         ArrayList<Book> books = store.getBookWithTitle("Lasten");
 
         for (int i = 0; i < books.size(); i++) {
             System.out.println(books.get(i).toString());
         }
+
+ */
+
+        User user = store.getUser(1234);
+
+        System.out.println(user.toString());
+
+        ArrayList<Integer> IDs = store.getAllUserID();
+
+        for (int i = 0; i < IDs.size(); i++) {
+            System.out.println(IDs.get(i).intValue());
+        }
+        ArrayList<Book> books = store.getUserBooks(1234);
+
+        for (int i = 0; i < books.size(); i++) {
+            System.out.println(books.get(i).toString());
+        }
+
+        System.out.println(books.size());
 
 
     }

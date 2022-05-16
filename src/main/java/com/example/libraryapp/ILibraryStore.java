@@ -30,17 +30,17 @@ public interface ILibraryStore {
     den hämtar både namnet på boken, plus countet av dens availability
      */
 
-    User getUser(int userID);
+    User getUser(int userID) throws SQLException;
     /*
     Denna metod används för att hämta en användare med hjälp av användar-ID
      */
 
-    ArrayList<Integer> getAllUserID();
+    ArrayList<Integer> getAllUserID() throws SQLException;
     /*
     hämtar alla nuvarande existerande användarID, har med createUser funktionen att göra
      */
 
-    ArrayList<Book> getUserBooks(int userID);
+    ArrayList<Book> getUserBooks(int userID) throws SQLException;
     /*
     Hämtar från kopplingstabellen de böcker, samt antalet (går att se genom längden på arrayen),
     som användaren har utlånade
