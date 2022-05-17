@@ -46,24 +46,24 @@ public interface ILibraryStore {
     som användaren har utlånade
      */
 
-    ArrayList<String> getUserPersonalNumbers();
+    ArrayList<String> getUserPersonalNumbers() throws SQLException;
     /*
     Hämtar alla personnummer som finns i databasen, används för funktionen createUser
      */
 
-    ArrayList<String> getBannedUsersPersonalNumber();
+    ArrayList<String> getBannedUsersPersonalNumber() throws SQLException;
     /*
     Hämtar de personnummer på före detta användare som numera är bannade och inte får registrera sig igen
      */
 
-    void returnBook(int bookID);
+    void returnBook(int bookID) throws SQLException;
     /*
     Används när en bok ska lämnas tillbaka, genom dess ID
     Kommer fungera genom att ta bort "raden" från kopplingstabellen,
     samt att ändra "availability" attributet till true.
      */
 
-    void storeLendBook(int bookID);
+    void storeLendBook(int bookID, int userID) throws SQLException;
     /*
     Används när en bok ska lånas, genom dess ID
     fungerar på motsatt sätt till returnBook, alltså;
@@ -72,25 +72,25 @@ public interface ILibraryStore {
     lägg även till tiden av lånat med CurrentTime
      */
 
-    void createUser(int userID, String firstName, String lastName, String personalNumber, int level);
+    void createUser(int userID, String firstName, String lastName, String personalNumber, int level) throws SQLException;
    /*
    Används för att skapa en ny användare
     */
 
-    void deleteUser(int userID);
+    void deleteUser(int userID) throws SQLException;
     /*
     Används för att ta bort en användare
     bör fungera på så sätt att den ta bort den användare som har matchande ID som inputen
      */
 
-    void banUser(int userID);
+    void banUser(int userID) throws SQLException;
     /*
     Används för att banna en användare
     fungerar genom att ta bort användaren i user-tabellen,
     och lägga till dem i banned_users tabellen
      */
 
-    void suspendUser(int userID);
+    void suspendUser(int userID) throws SQLException;
     /*
     Används för att suspenda en användare
     bör sätta deras "suspended" attribut till true
@@ -100,7 +100,7 @@ public interface ILibraryStore {
     lägg till user i suspended-tabellen
      */
 
-    void unsuspendUser(int userID);
+    void unsuspendUser(int userID) throws SQLException;
     /*
     används när användare ska sluta vara suspended, gör motsatsen till ovanstående metod
     skillnaden är att suscounter inte minskar

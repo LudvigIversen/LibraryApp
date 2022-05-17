@@ -12,7 +12,7 @@ public class LibraryStore implements ILibraryStore{
                 "root", "Luddeiversen1234")) {
 
             Statement statement = conn.createStatement();
-            ResultSet set = statement.executeQuery("SELECT * FROM books where title='" + atitle + "'" );
+            ResultSet set = statement.executeQuery("SELECT * FROM books where title='" + atitle + "' AND available=true" );
 
             while (set.next()) { //använd alltid en "while" när ResultSet ska hanteras
                 Book book = new Book();
@@ -36,7 +36,7 @@ public class LibraryStore implements ILibraryStore{
                 "root", "Luddeiversen1234")) {
 
             Statement statement = conn.createStatement();
-            ResultSet set = statement.executeQuery("SELECT * FROM books where ISBN='" + ISBN + "'" );
+            ResultSet set = statement.executeQuery("SELECT * FROM books where ISBN='" + ISBN + "' AND available=true" );
 
             while (set.next()) {
                 Book book = new Book();
@@ -123,47 +123,173 @@ public class LibraryStore implements ILibraryStore{
     }
 
     @Override
-    public ArrayList<String> getUserPersonalNumbers() {
-        return new ArrayList<String>();
+    public ArrayList<String> getUserPersonalNumbers() throws SQLException{
+        ArrayList<String> IDs = new ArrayList<String>();
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            Statement statement = conn.createStatement();
+            ResultSet set = statement.executeQuery("SELECT PersonalNumber FROM users");
+
+            while (set.next()) {
+                String pN = set.getString(1);
+                IDs.add(pN);
+            }
+
+        }
+
+        return IDs;
+
+    }
+    @Override
+    public ArrayList<String> getBannedUsersPersonalNumber() throws SQLException {
+
+        ArrayList<String> IDs = new ArrayList<String>();
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            Statement statement = conn.createStatement();
+            ResultSet set = statement.executeQuery("SELECT PersonalNumber FROM banned_users");
+
+            while (set.next()) {
+                String pN = set.getString(1);
+                IDs.add(pN);
+            }
+
+        }
+
+        return IDs;
     }
 
     @Override
-    public ArrayList<String> getBannedUsersPersonalNumber() {
-        return new ArrayList<String>();
-    }
+    public void returnBook(int bookID) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
 
-    @Override
-    public void returnBook(int bookID) {
+            Statement statement = conn.createStatement();
+            statement.executeUpdate("delete from userbooks where BookID =" + bookID);
+            statement.executeUpdate("update books set available = true where ID =" + bookID);
 
-    }
-
-    @Override
-    public void storeLendBook(int bookID) {
-
-    }
-
-    @Override
-    public void createUser(int userID, String firstName, String lastName, String personalNumber, int level) {
+        }
 
     }
 
     @Override
-    public void deleteUser(int userID) {
+    public void storeLendBook(int bookID, int userID) throws SQLException{
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+
+
+
+            Statement statement = conn.createStatement();
+            statement.executeUpdate("insert into userbooks (BookID, UserID, TimeOfLoan) values ("+ bookID + "," + userID +",current_timestamp())");
+            statement.executeUpdate("update books set available = false where ID =" + bookID);
+
+        }
+    }
+
+    @Override
+    public void createUser(int userID, String firstName, String lastName, String personalNumber, int level) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            Statement statement = conn.createStatement();
+            statement.executeUpdate("insert into users (ID, FirstName, LastName, PersonalNumber, Level, Suscounter, Suspended) values (" + userID +", '"+ firstName + "', '"+ lastName + "', '" + personalNumber + "', " + level + ", 0, false )");
+
+        }
+    }
+
+    @Override
+    public void deleteUser(int userID) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            Statement statement = conn.createStatement();
+            statement.executeUpdate("delete from users where ID='" + userID + "'");
+        }
 
     }
 
     @Override
-    public void banUser(int userID) {
+    public void banUser(int userID) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            int ID = 0;
+            String fN = "";
+            String lN = "";
+            String pN = "";
+            int level = 0;
+            int susCounter = 0;
+            boolean sus = true;
+
+                    Statement statement1 = conn.createStatement();
+            ResultSet set = statement1.executeQuery("select * from users where ID='" + userID + "'");
+            while (set.next()) {
+                ID = set.getInt("ID");
+                fN = set.getString("FirstName");
+                lN = set.getString("LastName");
+                pN = set.getString("PersonalNumber");
+                level = set.getInt("Level");
+                susCounter = set.getInt("Suscounter");
+                sus = set.getBoolean("Suspended");
+            }
+            Statement statement2 = conn.createStatement();
+            statement2.executeUpdate("insert into banned_users (ID, FirstName, LastName, PersonalNumber, Level, Suscounter, Suspended) values (" + userID +", '"+ fN + "', '"+ lN + "', '" + pN + "', " + level + ", "+ susCounter + ", "+sus + " )");
+            statement2.executeUpdate("delete from users where ID='" + userID + "'");
+        }
 
     }
 
     @Override
-    public void suspendUser(int userID) {
+    public void suspendUser(int userID) throws SQLException{
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            int ID = 0;
+            String fN = "";
+            String lN = "";
+            String pN = "";
+            int level = 0;
+            int susCounter = 0;
+            boolean sus = true;
+
+            Statement statement1 = conn.createStatement();
+            ResultSet set = statement1.executeQuery("select * from users where ID='" + userID + "'");
+            while (set.next()) {
+                ID = set.getInt("ID");
+                fN = set.getString("FirstName");
+                lN = set.getString("LastName");
+                pN = set.getString("PersonalNumber");
+                level = set.getInt("Level");
+                susCounter = set.getInt("Suscounter");
+                sus = set.getBoolean("Suspended");
+            }
+            Statement statement2 = conn.createStatement();
+            statement2.executeUpdate("insert into suspended_users (ID, FirstName, LastName, PersonalNumber, Level, Suscounter, Suspended, TimeOfSuspension) values (" + userID +", '"+ fN + "', '"+ lN + "', '" + pN + "', " + level + ", "+ susCounter + ", "+sus + ", current_timestamp())");
+            statement2.executeUpdate("update users set Suspended = true, Suscounter = "+ (susCounter + 1) +  " where ID='" + userID + "'");
+        }
 
     }
 
     @Override
-    public void unsuspendUser(int userID) {
+    public void unsuspendUser(int userID) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
 
+            Statement statement = conn.createStatement();
+            statement.executeUpdate("delete from suspended_users where ID='" + userID + "'");
+            statement.executeUpdate("update users set Suspended = false where ID='" + userID + "'");
+        }
     }
 }

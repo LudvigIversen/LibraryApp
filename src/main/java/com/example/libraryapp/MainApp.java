@@ -17,6 +17,10 @@ denna log-in funktion kommer också vara grunden till hur vi suspendar användar
 deras lånade böcker och när de senast var
  */
 
+    /*
+    Vi måste komma ihåg att vi ska lägga till logging
+     */
+
     @Override
     public void start(Stage primaryStage) {
 
