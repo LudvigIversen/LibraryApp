@@ -1,7 +1,9 @@
 package com.example.libraryapp;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 public interface ILibraryStore {
 
@@ -107,8 +109,12 @@ public interface ILibraryStore {
      */
 
 
+    Timestamp getUserSuspsionDate(int userID) throws SQLException;
+    /*
+    hämtar datumet/tiden då användare blev suspended
+     */
 
-
+    Timestamp getUserOldestBook(int userID) throws SQLException;
 
 
 }

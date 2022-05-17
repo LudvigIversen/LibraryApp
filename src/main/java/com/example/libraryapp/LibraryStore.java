@@ -2,17 +2,18 @@ package com.example.libraryapp;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class LibraryStore implements ILibraryStore{
     @Override
-    public ArrayList<Book> getBookWithTitle(String atitle) throws SQLException {
+    public ArrayList<Book> getBookWithTitle(String title) throws SQLException {
         ArrayList<Book> books = new ArrayList<Book>();
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
                 "root", "Luddeiversen1234")) {
 
             Statement statement = conn.createStatement();
-            ResultSet set = statement.executeQuery("SELECT * FROM books where title='" + atitle + "' AND available=true" );
+            ResultSet set = statement.executeQuery("SELECT * FROM books where title='" + title + "' AND available=true" );
 
             while (set.next()) { //använd alltid en "while" när ResultSet ska hanteras
                 Book book = new Book();
@@ -187,7 +188,7 @@ public class LibraryStore implements ILibraryStore{
 
 
             Statement statement = conn.createStatement();
-            statement.executeUpdate("insert into userbooks (BookID, UserID, TimeOfLoan) values ("+ bookID + "," + userID +",current_timestamp())");
+            statement.executeUpdate("insert into userbooks (BookID, UserID, TimeOfLoan) values ("+ bookID + "," + userID +", now())");
             statement.executeUpdate("update books set available = false where ID =" + bookID);
 
         }
@@ -275,10 +276,22 @@ public class LibraryStore implements ILibraryStore{
                 sus = set.getBoolean("Suspended");
             }
             Statement statement2 = conn.createStatement();
-            statement2.executeUpdate("insert into suspended_users (ID, FirstName, LastName, PersonalNumber, Level, Suscounter, Suspended, TimeOfSuspension) values (" + userID +", '"+ fN + "', '"+ lN + "', '" + pN + "', " + level + ", "+ susCounter + ", "+sus + ", current_timestamp())");
-            statement2.executeUpdate("update users set Suspended = true, Suscounter = "+ (susCounter + 1) +  " where ID='" + userID + "'");
-        }
+            statement2.executeUpdate("insert into suspended_users (ID, FirstName, LastName, PersonalNumber, Level, Suscounter, Suspended, TimeOfSuspension) values (" + userID + ", '" + fN + "', '" + lN + "', '" + pN + "', " + level + ", " + susCounter + ", " + sus + ", now())");
+            statement2.executeUpdate("update users set Suspended = true, Suscounter = " + (susCounter + 1) + " where ID='" + userID + "'");
 
+            ArrayList<Integer> booksIDs = new ArrayList<Integer>();
+            Integer bID;
+            Statement statement3 = conn.createStatement();
+            ResultSet set2 = statement3.executeQuery("select * from userbooks where UserID=" + userID);
+            while (set2.next()) {
+                bID = set2.getInt("BookID");
+                booksIDs.add(bID);
+            }
+
+            for (int i = 0; i < booksIDs.size(); i++) {
+                returnBook(booksIDs.get(i));
+            }
+        }
     }
 
     @Override
@@ -292,4 +305,40 @@ public class LibraryStore implements ILibraryStore{
             statement.executeUpdate("update users set Suspended = false where ID='" + userID + "'");
         }
     }
+
+    @Override
+    public Timestamp getUserSuspsionDate(int userID) throws SQLException {
+        Timestamp time = null;
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            Statement statement = conn.createStatement();
+            ResultSet set = statement.executeQuery("select TimeOfSuspension from suspended_users where ID=" + userID);
+
+            while (set.next()) {
+                time = set.getTimestamp("TimeOfSuspension");
+            }
+        }
+        return time;
+    }
+
+    @Override
+    public Timestamp getUserOldestBook(int userID) throws SQLException {
+        Timestamp time = null;
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            Statement statement = conn.createStatement();
+            ResultSet set = statement.executeQuery("select TimeOfLoan from userbooks where UserID="+ userID +" order by TimeOfLoan asc limit 1");
+
+            while (set.next()) {
+                time = set.getTimestamp("TimeOfLoan");
+            }
+        }
+        return time;
+    }
+
+
 }
