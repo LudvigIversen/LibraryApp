@@ -1,8 +1,10 @@
 package com.example.libraryapp;
 
+import java.sql.SQLException;
+
 public interface ILibraryManager {
 
-    boolean checkIfUserCanLend(int userID);
+    boolean checkIfUserCanLend(int userID) throws SQLException;
     /*
     Kommer att använda sig av funktionen getUserBooks från LibraryStore
     Den arrayen som denna funktionen returnar kommer längden att kollas och jämföras
