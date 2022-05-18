@@ -28,6 +28,11 @@ public class Fultester2 {
          long timeLoan = loanTime.getTime();
             System.out.println(timeLoan);
 
+            long diff = time - timeSus;
+
+
+            System.out.println(diff);
+
         }
     }
 }

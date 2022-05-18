@@ -37,17 +37,5 @@ public interface ILibraryManager {
     getAllUserID
      */
 
-    int checkUserLastSuspension(int userID);
-    /*
-    returnerar en int som motsvarar tiden som användaren har varit suspended
-     */
-
-
-
-
-
-
-
-
 
 }

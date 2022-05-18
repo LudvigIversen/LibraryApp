@@ -8,7 +8,7 @@ public class User {
     private int level;
     private int suscounter;
     private boolean suspended;
-   // private Book[] books; denna kanske ska vara en int sen som bara visar hur många böcker man får hålla
+    private int books;
 
     public User(int userID, String firstName, String lastName, String personalNumber, int level, int suscounter, boolean suspended) {
         this.userID = userID;
@@ -18,18 +18,17 @@ public class User {
         this.level = level;
         this.suscounter = suscounter;
         this.suspended = suspended;
-    /*
+
         if (level == 1) {
-            books = new Book[3];
+            books = 3;
         } else if (level == 2) {
-            books = new Book[5];
+            books = 5;
         } else if (level == 3) {
-            books = new Book[7];
+            books = 7;
         } else if (level == 4) {
-            books = new Book[10];
+            books = 10;
         }
 
-     */
     }
 
     @Override
@@ -100,16 +99,14 @@ public class User {
     public void setSuspended(boolean suspended) {
         this.suspended = suspended;
     }
-    /*
-    public Book[] getBooks() {
+
+    public int getBooks() {
         return books;
     }
 
-    public void setBooks(Book[] books) {
+    public void setBooks(int books) {
         this.books = books;
     }
-
-     */
 
 
 }
