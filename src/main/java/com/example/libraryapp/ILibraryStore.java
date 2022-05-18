@@ -109,7 +109,7 @@ public interface ILibraryStore {
      */
 
 
-    Timestamp getUserSuspsionDate(int userID) throws SQLException;
+    Timestamp getUserSuspensionDate(int userID) throws SQLException;
     /*
     hämtar datumet/tiden då användare blev suspended
      */

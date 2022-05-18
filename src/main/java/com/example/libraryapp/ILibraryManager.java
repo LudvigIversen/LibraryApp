@@ -11,25 +11,22 @@ public interface ILibraryManager {
     ifall användaren får låna flera
      */
 
-    boolean checkIfAnyLentBooksAreLate(int userID);
+    boolean checkIfAnyLentBooksAreLate(int userID) throws SQLException, UnusableException;
     /*
     Kommer kolla om några av de böcker som en användare har lånat är försenade
      */
 
-    void lendBook(int bookID);
+    boolean lendBook(int bookID, int userID) throws SQLException;
     /*
     Lånar böcker åt user
     Kommer använda sig av checkIfUserCanLend för att kolla möjligheterna
     för användaren att låna
      */
 
-    boolean checkIfUserIsSupended(int userID);
-    /*
-    Kollar ifall en användare är suspended, använder sig av getUser funktionen i librarystore
-     */
 
 
-    void registerUser(int userID, String firstName, String lastName, String personalNumber, int level);
+
+    int registerUser(int userID, String firstName, String lastName, String personalNumber, int level) throws SQLException, UnusableException;
     /*
     Denna metod anvädns när en user ska skapas
     Denna metoden kommer även kolla och checka så att anvädaren får skapas

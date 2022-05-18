@@ -1,6 +1,7 @@
 package com.example.libraryapp;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class LibraryManager implements ILibraryManager{
@@ -9,44 +10,107 @@ public class LibraryManager implements ILibraryManager{
     public LibraryManager(LibraryStore str){
         this.store = str;
     }
-    @Override
+
     public boolean checkIfUserCanLend(int userID) throws SQLException {
-         /*
-         Hämta anvädaren//getUser från store --> vi vill se storleken på möjliga böcker
-         Hämta listan på deras lånade böcker// getUserBooks från store
-         om listan är mindre än anvädarens "books", return true
-         Om listan är lika stor, return false
-          */
         User user = store.getUser(userID);
+
         ArrayList<Book> books = store.getUserBooks(userID);
 
         if (books.size() < user.getBooks()) {
             return true;
-        } else  {
+        } else {
+            return false;
+        }
+
+
+    }
+
+
+    public boolean checkIfAnyLentBooksAreLate(int userID) throws SQLException, UnusableException {
+        Timestamp timeOfLoanStamp = store.getUserOldestBook(userID);
+        if(timeOfLoanStamp == null) {
+            throw new UnusableException();
+        }
+
+        long timeOfLoan = timeOfLoanStamp.getTime();
+        Timestamp sysTime = new Timestamp(System.currentTimeMillis());
+        long currentTime = sysTime.getTime();
+        long diff = currentTime - timeOfLoan;
+
+        if (diff < 1200000) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+    public boolean lendBook(int bookID, int userID) throws SQLException {
+        boolean canLend = checkIfUserCanLend(userID);
+
+        if(canLend == true) {
+            store.storeLendBook(bookID, userID);
+            return true;
+        } else {
             return false;
         }
 
     }
 
-    @Override
-    public boolean checkIfAnyLentBooksAreLate(int userID) {
-        return false;
-    }
 
-    @Override
-    public void lendBook(int bookID) {
+    public boolean checkIfUserIsSupended(int userID) throws SQLException {
+        ArrayList<Integer> IDs = store.getSuspendedIDs();
 
-    }
-
-    @Override
-    public boolean checkIfUserIsSupended(int userID) {
-        return false;
-    }
-
-    @Override
-    public void registerUser(int userID, String firstName, String lastName, String personalNumber, int level) {
+        if(IDs.contains(userID)) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
 
+    public boolean checkIfUserShouldBeUnsuspended(int userID) throws SQLException {
+        Timestamp timeOfLoanStamp = store.getUserSuspensionDate(userID);
+        long timeOfLoan = timeOfLoanStamp.getTime();
+        Timestamp sysTime = new Timestamp(System.currentTimeMillis());
+        long currentTime = sysTime.getTime();
+        long diff = currentTime - timeOfLoan;
 
+        if (diff > 1200000) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public int registerUser(int userID, String firstName, String lastName, String personalNumber, int level) throws SQLException, UnusableException {
+        int result;
+        ArrayList<Integer> currentIDs = store.getAllUserID();
+        ArrayList<String> currentPN = store.getUserPersonalNumbers();
+        ArrayList<String> bannedPN = store.getBannedUsersPersonalNumber();
+
+        if (personalNumber.length() != 11) {
+            throw new UnusableException();
+        } else if (userID > 9999 || userID < 1000) {
+            throw new UnusableException();
+        } else {
+
+            if (currentIDs.contains(userID)) {
+                result = 1;
+                return result;
+            } else if (currentPN.contains(personalNumber)) {
+                result = 2;
+                return result;
+            } else if (bannedPN.contains(personalNumber)) {
+                result = 0;
+                return result;
+            } else {
+                store.createUser(userID, firstName, lastName, personalNumber, level);
+                result = 3;
+                return result;
+            }
+        }
+    }
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class LibraryStore implements ILibraryStore{
-    @Override
+
     public ArrayList<Book> getBookWithTitle(String title) throws SQLException {
         ArrayList<Book> books = new ArrayList<Book>();
         try (Connection conn = DriverManager.getConnection(
@@ -14,6 +14,7 @@ public class LibraryStore implements ILibraryStore{
 
             Statement statement = conn.createStatement();
             ResultSet set = statement.executeQuery("SELECT * FROM books where title='" + title + "' AND available=true" );
+
 
             while (set.next()) { //använd alltid en "while" när ResultSet ska hanteras
                 Book book = new Book();
@@ -29,7 +30,7 @@ public class LibraryStore implements ILibraryStore{
         return books;
     }
 
-    @Override
+
     public ArrayList<Book> getBookWithISBN(int ISBN) throws SQLException {
         ArrayList<Book> books = new ArrayList<Book>();
         try (Connection conn = DriverManager.getConnection(
@@ -53,12 +54,12 @@ public class LibraryStore implements ILibraryStore{
         return books;
     }
 
-    @Override
+
     public ArrayList<String> getBooksAndAvailability() {
         return new ArrayList<String>();
     }
 
-    @Override
+
     public User getUser(int userID) throws SQLException {
         User user = null;
         try (Connection conn = DriverManager.getConnection(
@@ -79,7 +80,25 @@ public class LibraryStore implements ILibraryStore{
 
     }
 
-    @Override
+    public ArrayList<Integer> getSuspendedIDs() throws SQLException {
+        ArrayList<Integer> IDs = new ArrayList<Integer>();
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
+                "root", "Luddeiversen1234")) {
+
+            Statement statement = conn.createStatement();
+            ResultSet set = statement.executeQuery("SELECT ID FROM suspended_users");
+
+            while(set.next()) {
+                Integer ID = set.getInt("ID");
+                IDs.add(ID);
+            }
+
+        }
+        return IDs;
+    }
+
+
     public ArrayList<Integer> getAllUserID() throws SQLException{
         ArrayList<Integer> IDs = new ArrayList<Integer>();
         try (Connection conn = DriverManager.getConnection(
@@ -99,7 +118,7 @@ public class LibraryStore implements ILibraryStore{
         return IDs;
     }
 
-    @Override
+
     public ArrayList<Book> getUserBooks(int userID) throws SQLException { // kanske behöver hämta timestamp, kan också vara en lösning att hämta oldestBook typ
         ArrayList<Book> books = new ArrayList<Book>();
         try (Connection conn = DriverManager.getConnection(
@@ -123,7 +142,7 @@ public class LibraryStore implements ILibraryStore{
         return books;
     }
 
-    @Override
+
     public ArrayList<String> getUserPersonalNumbers() throws SQLException{
         ArrayList<String> IDs = new ArrayList<String>();
         try (Connection conn = DriverManager.getConnection(
@@ -143,7 +162,7 @@ public class LibraryStore implements ILibraryStore{
         return IDs;
 
     }
-    @Override
+
     public ArrayList<String> getBannedUsersPersonalNumber() throws SQLException {
 
         ArrayList<String> IDs = new ArrayList<String>();
@@ -164,7 +183,7 @@ public class LibraryStore implements ILibraryStore{
         return IDs;
     }
 
-    @Override
+
     public void returnBook(int bookID) throws SQLException {
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
@@ -178,13 +197,11 @@ public class LibraryStore implements ILibraryStore{
 
     }
 
-    @Override
+
     public void storeLendBook(int bookID, int userID) throws SQLException{
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
                 "root", "Luddeiversen1234")) {
-
-
 
 
             Statement statement = conn.createStatement();
@@ -194,7 +211,7 @@ public class LibraryStore implements ILibraryStore{
         }
     }
 
-    @Override
+
     public void createUser(int userID, String firstName, String lastName, String personalNumber, int level) throws SQLException {
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
@@ -206,7 +223,7 @@ public class LibraryStore implements ILibraryStore{
         }
     }
 
-    @Override
+
     public void deleteUser(int userID) throws SQLException {
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
@@ -218,7 +235,7 @@ public class LibraryStore implements ILibraryStore{
 
     }
 
-    @Override
+
     public void banUser(int userID) throws SQLException {
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
@@ -232,7 +249,7 @@ public class LibraryStore implements ILibraryStore{
             int susCounter = 0;
             boolean sus = true;
 
-                    Statement statement1 = conn.createStatement();
+            Statement statement1 = conn.createStatement();
             ResultSet set = statement1.executeQuery("select * from users where ID='" + userID + "'");
             while (set.next()) {
                 ID = set.getInt("ID");
@@ -250,7 +267,7 @@ public class LibraryStore implements ILibraryStore{
 
     }
 
-    @Override
+
     public void suspendUser(int userID) throws SQLException{
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
@@ -294,7 +311,7 @@ public class LibraryStore implements ILibraryStore{
         }
     }
 
-    @Override
+
     public void unsuspendUser(int userID) throws SQLException {
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
@@ -306,8 +323,8 @@ public class LibraryStore implements ILibraryStore{
         }
     }
 
-    @Override
-    public Timestamp getUserSuspsionDate(int userID) throws SQLException {
+
+    public Timestamp getUserSuspensionDate(int userID) throws SQLException {
         Timestamp time = null;
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://127.0.0.1/LibraryApp?useSSL=false",
@@ -323,7 +340,6 @@ public class LibraryStore implements ILibraryStore{
         return time;
     }
 
-    @Override
     public Timestamp getUserOldestBook(int userID) throws SQLException {
         Timestamp time = null;
         try (Connection conn = DriverManager.getConnection(
